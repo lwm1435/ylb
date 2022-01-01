@@ -13,6 +13,12 @@
 
     <dependencies>
 
+        <!--lombok工具-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
         <!--jwt-->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -61,5 +67,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
 
 </project>

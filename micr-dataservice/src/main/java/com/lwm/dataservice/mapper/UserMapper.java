@@ -22,4 +22,8 @@ public interface UserMapper {
 
     int updateByPrimaryKey(User record);
 
+    /**
+     * 查询用户总量
+     */
+    Long selectTotalUser();
 }

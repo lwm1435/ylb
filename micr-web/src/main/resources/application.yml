@@ -13,7 +13,7 @@ dubbo:
   registry:
     address: zookeeper://localhost:2181
   scan:
-    base-packages: com.bjpowernode.web
+    base-packages: com.lwm.web
   consumer:
     timeout: 30000
     retries: 0

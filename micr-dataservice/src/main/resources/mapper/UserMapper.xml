@@ -5,14 +5,14 @@
 <mapper namespace="com.lwm.dataservice.mapper.UserMapper">
 
     <resultMap id="BaseResultMap" type="com.lwm.common.model.User">
-            <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="phone" column="phone" jdbcType="VARCHAR"/>
-            <result property="loginPassword" column="login_password" jdbcType="VARCHAR"/>
-            <result property="name" column="name" jdbcType="VARCHAR"/>
-            <result property="idCard" column="id_card" jdbcType="VARCHAR"/>
-            <result property="addTime" column="add_time" jdbcType="TIMESTAMP"/>
-            <result property="lastLoginTime" column="last_login_time" jdbcType="TIMESTAMP"/>
-            <result property="headerImage" column="header_image" jdbcType="VARCHAR"/>
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="loginPassword" column="login_password" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="idCard" column="id_card" jdbcType="VARCHAR"/>
+        <result property="addTime" column="add_time" jdbcType="TIMESTAMP"/>
+        <result property="lastLoginTime" column="last_login_time" jdbcType="TIMESTAMP"/>
+        <result property="headerImage" column="header_image" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -20,87 +20,94 @@
         name,id_card,add_time,
         last_login_time,header_image
     </sql>
-
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from u_user
-        where  id = #{id,jdbcType=INTEGER} 
+        where id = #{id,jdbcType=INTEGER}
     </select>
-
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-        delete from u_user
-        where  id = #{id,jdbcType=INTEGER} 
+        delete
+        from u_user
+        where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.lwm.common.model.User" useGeneratedKeys="true">
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.lwm.common.model.User"
+            useGeneratedKeys="true">
         insert into u_user
-        ( id,phone,login_password
-        ,name,id_card,add_time
-        ,last_login_time,header_image)
-        values (#{id,jdbcType=INTEGER},#{phone,jdbcType=VARCHAR},#{loginPassword,jdbcType=VARCHAR}
-        ,#{name,jdbcType=VARCHAR},#{idCard,jdbcType=VARCHAR},#{addTime,jdbcType=TIMESTAMP}
-        ,#{lastLoginTime,jdbcType=TIMESTAMP},#{headerImage,jdbcType=VARCHAR})
+        ( id, phone, login_password
+        , name, id_card, add_time
+        , last_login_time, header_image)
+        values ( #{id,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{loginPassword,jdbcType=VARCHAR}
+               , #{name,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}
+               , #{lastLoginTime,jdbcType=TIMESTAMP}, #{headerImage,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.lwm.common.model.User" useGeneratedKeys="true">
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.lwm.common.model.User"
+            useGeneratedKeys="true">
         insert into u_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="id != null">id,</if>
-                <if test="phone != null">phone,</if>
-                <if test="loginPassword != null">login_password,</if>
-                <if test="name != null">name,</if>
-                <if test="idCard != null">id_card,</if>
-                <if test="addTime != null">add_time,</if>
-                <if test="lastLoginTime != null">last_login_time,</if>
-                <if test="headerImage != null">header_image,</if>
+            <if test="id != null">id,</if>
+            <if test="phone != null">phone,</if>
+            <if test="loginPassword != null">login_password,</if>
+            <if test="name != null">name,</if>
+            <if test="idCard != null">id_card,</if>
+            <if test="addTime != null">add_time,</if>
+            <if test="lastLoginTime != null">last_login_time,</if>
+            <if test="headerImage != null">header_image,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="id != null">#{id,jdbcType=INTEGER},</if>
-                <if test="phone != null">#{phone,jdbcType=VARCHAR},</if>
-                <if test="loginPassword != null">#{loginPassword,jdbcType=VARCHAR},</if>
-                <if test="name != null">#{name,jdbcType=VARCHAR},</if>
-                <if test="idCard != null">#{idCard,jdbcType=VARCHAR},</if>
-                <if test="addTime != null">#{addTime,jdbcType=TIMESTAMP},</if>
-                <if test="lastLoginTime != null">#{lastLoginTime,jdbcType=TIMESTAMP},</if>
-                <if test="headerImage != null">#{headerImage,jdbcType=VARCHAR},</if>
+            <if test="id != null">#{id,jdbcType=INTEGER},</if>
+            <if test="phone != null">#{phone,jdbcType=VARCHAR},</if>
+            <if test="loginPassword != null">#{loginPassword,jdbcType=VARCHAR},</if>
+            <if test="name != null">#{name,jdbcType=VARCHAR},</if>
+            <if test="idCard != null">#{idCard,jdbcType=VARCHAR},</if>
+            <if test="addTime != null">#{addTime,jdbcType=TIMESTAMP},</if>
+            <if test="lastLoginTime != null">#{lastLoginTime,jdbcType=TIMESTAMP},</if>
+            <if test="headerImage != null">#{headerImage,jdbcType=VARCHAR},</if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.lwm.common.model.User">
         update u_user
         <set>
-                <if test="phone != null">
-                    phone = #{phone,jdbcType=VARCHAR},
-                </if>
-                <if test="loginPassword != null">
-                    login_password = #{loginPassword,jdbcType=VARCHAR},
-                </if>
-                <if test="name != null">
-                    name = #{name,jdbcType=VARCHAR},
-                </if>
-                <if test="idCard != null">
-                    id_card = #{idCard,jdbcType=VARCHAR},
-                </if>
-                <if test="addTime != null">
-                    add_time = #{addTime,jdbcType=TIMESTAMP},
-                </if>
-                <if test="lastLoginTime != null">
-                    last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
-                </if>
-                <if test="headerImage != null">
-                    header_image = #{headerImage,jdbcType=VARCHAR},
-                </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="loginPassword != null">
+                login_password = #{loginPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="idCard != null">
+                id_card = #{idCard,jdbcType=VARCHAR},
+            </if>
+            <if test="addTime != null">
+                add_time = #{addTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastLoginTime != null">
+                last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="headerImage != null">
+                header_image = #{headerImage,jdbcType=VARCHAR},
+            </if>
         </set>
-        where   id = #{id,jdbcType=INTEGER} 
+        where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.lwm.common.model.User">
         update u_user
-        set 
-            phone =  #{phone,jdbcType=VARCHAR},
-            login_password =  #{loginPassword,jdbcType=VARCHAR},
-            name =  #{name,jdbcType=VARCHAR},
-            id_card =  #{idCard,jdbcType=VARCHAR},
-            add_time =  #{addTime,jdbcType=TIMESTAMP},
-            last_login_time =  #{lastLoginTime,jdbcType=TIMESTAMP},
-            header_image =  #{headerImage,jdbcType=VARCHAR}
-        where   id = #{id,jdbcType=INTEGER} 
+        set phone           = #{phone,jdbcType=VARCHAR},
+            login_password  = #{loginPassword,jdbcType=VARCHAR},
+            name            = #{name,jdbcType=VARCHAR},
+            id_card         = #{idCard,jdbcType=VARCHAR},
+            add_time        = #{addTime,jdbcType=TIMESTAMP},
+            last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+            header_image    = #{headerImage,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <!--查询用户总量-->
+    <select id="selectTotalUser" resultType="java.lang.Long">
+        SELECT COUNT(*)
+        FROM u_user
+    </select>
+
 </mapper>

@@ -2,6 +2,8 @@ package com.lwm.dataservice.mapper;
 
 import com.lwm.common.model.BidInfo;
 
+import java.math.BigDecimal;
+
 /**
 * @author Administrator
 * @description 针对表【b_bid_info(投资记录表)】的数据库操作Mapper
@@ -22,4 +24,8 @@ public interface BidInfoMapper {
 
     int updateByPrimaryKey(BidInfo record);
 
+    /**
+     * 查询总成交金额
+     */
+    BigDecimal selectTotalMoney();
 }

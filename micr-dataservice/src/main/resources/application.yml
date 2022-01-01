@@ -9,7 +9,7 @@ spring:
 
 dubbo:
   scan:
-    base-packages: com.bjpowernode.dataservice
+    base-packages: com.lwm.dataservice
   registry:
     address: zookeeper://localhost:2181
   provider:
