@@ -1,8 +1,10 @@
 package com.lwm.dataservice.mapper;
 
 import com.lwm.common.model.BidInfo;
+import com.lwm.common.vo.InvestRank;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
 * @author Administrator
@@ -28,4 +30,9 @@ public interface BidInfoMapper {
      * 查询总成交金额
      */
     BigDecimal selectTotalMoney();
+
+    /**
+     * 查询投资排行前三
+     */
+    List<InvestRank> selectInvestRank();
 }

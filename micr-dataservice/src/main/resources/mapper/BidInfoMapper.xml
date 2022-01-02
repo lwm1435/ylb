@@ -92,4 +92,16 @@
         SELECT round(SUM(bid_money))
         FROM b_bid_info
     </select>
+
+    <!--查询投资排行前三-->
+    <select id="selectInvestRank" resultType="com.lwm.common.vo.InvestRank">
+        SELECT SUM(b.bid_money) AS money,
+               u.phone
+        FROM u_user u
+                 JOIN b_bid_info b
+                      ON u.id = b.uid
+        GROUP BY u.id, u.phone
+        ORDER BY money DESC
+        LIMIT 0,3
+    </select>
 </mapper>

@@ -1,8 +1,12 @@
 package com.lwm.web.controller;
 
+import com.lwm.api.service.InvestService;
 import com.lwm.api.service.PlatformService;
 import com.lwm.api.service.ProductService;
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.springframework.data.redis.core.StringRedisTemplate;
+
+import javax.annotation.Resource;
 
 /**
  * @author lwm1435@163.com
@@ -21,4 +25,16 @@ public class BaseController {
      */
     @DubboReference(interfaceClass = ProductService.class,version = "1.0")
     protected ProductService productService;
+
+    /**
+     * 投资服务
+     */
+    @DubboReference(interfaceClass = InvestService.class,version = "1.0")
+    protected InvestService investService;
+
+    /**
+     * redis服务
+     */
+    @Resource(name = "stringRedisTemplate")
+    protected StringRedisTemplate redisTemplate;
 }
