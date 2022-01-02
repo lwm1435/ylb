@@ -166,4 +166,10 @@
         ORDER BY release_time DESC
         LIMIT #{offset}, #{pageSize}
     </select>
+    <!--查询总记录数-->
+    <select id="selectCountByType" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM b_product_info
+        WHERE product_type = #{type}
+    </select>
 </mapper>

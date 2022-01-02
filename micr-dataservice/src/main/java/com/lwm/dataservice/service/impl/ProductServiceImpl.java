@@ -37,4 +37,17 @@ public class ProductServiceImpl implements ProductService {
 
         return productInfos;
     }
+
+    @Override
+    public int queryCountByType(Integer type) {
+        int row = 0;
+        //校验参数
+        if (type < 0) {
+            return row;
+        }
+        //访问数据库
+        row = productInfoMapper.selectCountByType(type);
+
+        return row;
+    }
 }

@@ -35,4 +35,9 @@ public interface ProductInfoMapper {
      * 根据产品类型分页查询产品
      */
     List<ProductInfo> selectPageByType(@Param("type") Integer type, @Param("offset") Integer offset, @Param("pageSize") Integer pageSize);
+
+    /**
+     * 查询总记录数
+     */
+    int selectCountByType(Integer type);
 }

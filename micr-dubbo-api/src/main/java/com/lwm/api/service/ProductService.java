@@ -15,4 +15,9 @@ public interface ProductService {
      * 根据产品类型分页查询产品
      */
     List<ProductInfo> queryPageByType(Integer type, Integer pageNo, Integer pageSize);
+
+    /**
+     * 查询总记录数
+     */
+    int queryCountByType(Integer type);
 }
