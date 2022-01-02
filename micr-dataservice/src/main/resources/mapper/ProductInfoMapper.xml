@@ -154,7 +154,16 @@
 
     <!--查询所有产品的平均利率-->
     <select id="selectAvgRate" resultType="java.math.BigDecimal">
-        SELECT round(AVG(rate),2)
+        SELECT round(AVG(rate), 2)
         FROM b_product_info
+    </select>
+    <!--根据产品类型分页查询产品-->
+    <select id="selectPageByType" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM b_product_info
+        WHERE product_type =#{type}
+        ORDER BY release_time DESC
+        LIMIT #{offset}, #{pageSize}
     </select>
 </mapper>

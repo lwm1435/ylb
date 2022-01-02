@@ -1,7 +1,7 @@
 package com.lwm.dataservice.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.lwm.api.service.PlatformInfoService;
+import com.lwm.api.service.PlatformService;
 import com.lwm.common.consts.RedisKey;
 import com.lwm.common.vo.PlatformInfo;
 import com.lwm.dataservice.mapper.BidInfoMapper;
@@ -19,8 +19,8 @@ import java.math.BigDecimal;
  * @date 2022-01-01 22:25
  * @description
  */
-@DubboService(interfaceClass = PlatformInfoService.class,version = "1.0")
-public class PlatformInfoServiceImpl implements PlatformInfoService {
+@DubboService(interfaceClass = PlatformService.class,version = "1.0")
+public class PlatformServiceImpl implements PlatformService {
     @Resource
     private StringRedisTemplate stringRedisTemplate;
     @Resource
@@ -31,11 +31,6 @@ public class PlatformInfoServiceImpl implements PlatformInfoService {
     private ProductInfoMapper productInfoMapper;
 
 
-    /**
-     * 从redis中获取首页的统计信息，没有数据就从持久层获取数据保存在redis30分钟
-     *
-     * @return 平台首页数据
-     */
     @Override
     public PlatformInfo queryIndexInfo() {
         PlatformInfo platformInfo = null;

@@ -1,6 +1,7 @@
 package com.lwm.web.controller;
 
-import com.lwm.api.service.PlatformInfoService;
+import com.lwm.api.service.PlatformService;
+import com.lwm.api.service.ProductService;
 import org.apache.dubbo.config.annotation.DubboReference;
 
 /**
@@ -9,6 +10,15 @@ import org.apache.dubbo.config.annotation.DubboReference;
  * @description
  */
 public class BaseController {
-    @DubboReference(interfaceClass = PlatformInfoService.class,version = "1.0")
-    protected PlatformInfoService platformInfoService;
+    /**
+     * 平台首页服务
+     */
+    @DubboReference(interfaceClass = PlatformService.class,version = "1.0")
+    protected PlatformService platformService;
+
+    /**
+     * 产品服务
+     */
+    @DubboReference(interfaceClass = ProductService.class,version = "1.0")
+    protected ProductService productService;
 }

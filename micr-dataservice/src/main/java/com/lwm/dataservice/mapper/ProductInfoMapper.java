@@ -1,8 +1,10 @@
 package com.lwm.dataservice.mapper;
 
 import com.lwm.common.model.ProductInfo;
+import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
 * @author Administrator
@@ -28,4 +30,9 @@ public interface ProductInfoMapper {
      * 查询所有产品的平均利率
      */
     BigDecimal selectAvgRate();
+
+    /**
+     * 根据产品类型分页查询产品
+     */
+    List<ProductInfo> selectPageByType(@Param("type") Integer type, @Param("offset") Integer offset, @Param("pageSize") Integer pageSize);
 }
