@@ -27,7 +27,7 @@ public class WebResult {
      * 默认失败的结果封装
      * @return
      */
-    public WebResult fail(){
+    public static WebResult fail(){
         WebResult webResult = new WebResult();
         webResult.setEnumCode(Code.FAIlURE);
         return webResult;
