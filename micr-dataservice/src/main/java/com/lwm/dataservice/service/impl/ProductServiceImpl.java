@@ -46,8 +46,14 @@ public class ProductServiceImpl implements ProductService {
             return row;
         }
         //访问数据库
-        row = productInfoMapper.selectCountByType(type);
+        return productInfoMapper.selectCountByType(type);
+    }
 
-        return row;
+    @Override
+    public ProductInfo queryDetailById(Integer id) {
+        if (id == null){
+            return null;
+        }
+        return productInfoMapper.selectByPrimaryKey(id);
     }
 }

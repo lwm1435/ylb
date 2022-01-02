@@ -2,6 +2,8 @@ package com.lwm.dataservice.mapper;
 
 import com.lwm.common.model.BidInfo;
 import com.lwm.common.vo.InvestRank;
+import com.lwm.common.vo.ProductBidInfo;
+import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -35,4 +37,11 @@ public interface BidInfoMapper {
      * 查询投资排行前三
      */
     List<InvestRank> selectInvestRank();
+
+    /**
+     * 根据产品id分页查投资记录
+     */
+    List<ProductBidInfo> selectByProdId(@Param("prodId") Integer prodId,
+                                        @Param("offset") Integer offset,
+                                        @Param("pageSize") Integer pageSize);
 }

@@ -20,4 +20,9 @@ public interface ProductService {
      * 查询总记录数
      */
     int queryCountByType(Integer type);
+
+    /**
+     * 根据产品id查询
+     */
+    ProductInfo queryDetailById(Integer id);
 }

@@ -28,13 +28,13 @@
         bid_min_limit,bid_max_limit,product_status,
         product_full_time,product_desc
     </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey"  resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from b_product_info
         where id = #{id,jdbcType=INTEGER}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <delete id="deleteByPrimaryKey"  >
         delete
         from b_product_info
         where id = #{id,jdbcType=INTEGER}

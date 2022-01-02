@@ -22,6 +22,7 @@ public class GlobalExceptionHandle {
     public WebResult handle(Exception e) {
         WebResult fail = WebResult.fail();
         fail.setMsg("异常信息：" + e.getMessage());
+        e.printStackTrace();
         return fail;
     }
 }

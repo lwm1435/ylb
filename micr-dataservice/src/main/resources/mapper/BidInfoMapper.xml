@@ -104,4 +104,18 @@
         ORDER BY money DESC
         LIMIT 0,3
     </select>
+
+    <select id="selectByProdId" resultType="com.lwm.common.vo.ProductBidInfo">
+        SELECT b.id,
+               DATE_FORMAT(bid_time, '%Y-%m-%d') AS bidDateTime,
+               bid_money                         AS bidMoney,
+               u.phone
+        FROM u_user u
+                 JOIN b_bid_info b
+                      ON u.id = b.uid
+        WHERE b.prod_id = #{prodId}
+        ORDER BY b.bid_time DESC
+        LIMIT #{offset}, #{pageSize};
+
+    </select>
 </mapper>

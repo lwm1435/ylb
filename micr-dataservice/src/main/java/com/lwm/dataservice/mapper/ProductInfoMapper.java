@@ -14,13 +14,13 @@ import java.util.List;
 */
 public interface ProductInfoMapper {
 
-    int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(ProductInfo record);
 
     int insertSelective(ProductInfo record);
 
-    ProductInfo selectByPrimaryKey(Long id);
+    ProductInfo selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(ProductInfo record);
 

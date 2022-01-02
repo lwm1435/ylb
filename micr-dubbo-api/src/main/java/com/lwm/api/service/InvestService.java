@@ -1,6 +1,7 @@
 package com.lwm.api.service;
 
 import com.lwm.common.vo.InvestRank;
+import com.lwm.common.vo.ProductBidInfo;
 
 import java.util.List;
 
@@ -16,4 +17,8 @@ public interface InvestService {
      */
     List<InvestRank> queryInvestRank();
 
+    /**
+     * 根据产品id查投资记录，分页查
+     */
+    List<ProductBidInfo> queryBidInfoByProductId(Integer id, Integer pageNo, Integer PageSize);
 }

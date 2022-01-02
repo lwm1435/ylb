@@ -4,6 +4,7 @@ import com.lwm.common.dto.WebResult;
 import com.lwm.common.enums.Code;
 import com.lwm.common.model.ProductInfo;
 import com.lwm.common.vo.Page;
+import com.lwm.common.vo.ProductBidInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,6 +54,29 @@ public class ProductController extends BaseController{
             webResult.setData(map);
         }while (false);
 
+        return webResult;
+    }
+
+    @ApiOperation("产品详情页查询")
+    @GetMapping("/product/info/detail")
+    public WebResult queryProductDetail(@RequestParam("id")Integer id){
+        WebResult webResult = WebResult.fail();
+        //根据id查单个产品
+        ProductInfo productInfo = productService.queryDetailById(id);
+        if (productInfo != null){
+            //根据产品id查多个投资记录，分页查
+            List<ProductBidInfo> bidInfos = investService.queryBidInfoByProductId(id,1,5);
+            if (bidInfos != null){
+                //封装数据
+                Map<String,Object> map = new HashMap<>(2);
+                map.put("bidInfos",bidInfos);
+                map.put("productInfo",productInfo);
+                webResult.setEnumCode(Code.SUCCESS);
+                webResult.setData(map);
+            }
+        }else {
+            webResult.setEnumCode(Code.PRODUCT_NOT_EXISTS);
+        }
         return webResult;
     }
 }

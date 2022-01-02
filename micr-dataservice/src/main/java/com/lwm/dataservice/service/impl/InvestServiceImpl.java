@@ -3,6 +3,7 @@ package com.lwm.dataservice.service.impl;
 import com.lwm.api.service.InvestService;
 import com.lwm.common.consts.RedisKey;
 import com.lwm.common.vo.InvestRank;
+import com.lwm.common.vo.ProductBidInfo;
 import com.lwm.dataservice.mapper.BidInfoMapper;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -58,5 +59,17 @@ public class InvestServiceImpl implements InvestService {
             }
         }
         return rankList;
+    }
+
+    @Override
+    public List<ProductBidInfo> queryBidInfoByProductId(Integer id, Integer pageNo, Integer pageSize) {
+        if (pageNo == null || pageNo < 1) {
+            pageNo = 1;
+        }
+        if (pageSize == null || pageSize < 0) {
+            pageSize = 6;
+        }
+
+        return bidInfoMapper.selectByProdId(id,(pageNo-1)*pageSize,pageSize);
     }
 }
