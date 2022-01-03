@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author lwm1435@163.com
@@ -266,4 +267,19 @@ public class UserController extends BaseController {
 
         return webResult;
     }
+
+    @ApiOperation(value = "用户退出")
+    @GetMapping("/v1/user/logout")
+    public WebResult logout(@RequestHeader Integer uid,
+                             @RequestHeader("Authorization") String authorization){
+        WebResult webResult = WebResult.fail();
+        //校验入参
+        if (StringUtils.isNoneBlank(String.valueOf(uid),authorization)){
+            //将token存储到redis中，标志这个token的用户一推出
+            redisTemplate.opsForValue().set(authorization.substring(7),"",2, TimeUnit.HOURS);
+            webResult.setEnumCode(Code.SUCCESS);
+        }
+        return webResult;
+    }
+
 }

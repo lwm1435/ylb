@@ -24,7 +24,7 @@ public interface InvestService {
     List<ProductBidInfo> queryBidInfoByProductId(Integer id, Integer pageNo, Integer PageSize);
 
     /**
-     * 查询投资记录
+     * 根据用户id分页查询投资记录
      */
     List<InvestRecordVO> queryBidRecordByUid(Integer uid,Integer pageNo,Integer pageSize);
 }

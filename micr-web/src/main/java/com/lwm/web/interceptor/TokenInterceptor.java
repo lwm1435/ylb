@@ -51,7 +51,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         if (StringUtils.isNoneBlank(authorization,uid)){
             if ("Bearer".equals(authorization.substring(0,6))){
                 String token = authorization.substring(7);
-                //从redis中查询是否有该token，没有表示不是退出的token标记
+                //从redis中查询是否有该token，没有表示该token用户没有退出
                 if (redis.opsForValue().get(token) == null){
                     //读取token
                     try {
