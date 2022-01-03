@@ -1,6 +1,10 @@
 package com.lwm.dataservice.mapper;
 
 import com.lwm.common.model.RechargeRecord;
+import com.lwm.common.vo.RechargeRecordVO;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author Administrator
@@ -10,16 +14,12 @@ import com.lwm.common.model.RechargeRecord;
 */
 public interface RechargeRecordMapper {
 
-    int deleteByPrimaryKey(Long id);
-
-    int insert(RechargeRecord record);
-
-    int insertSelective(RechargeRecord record);
-
     RechargeRecord selectByPrimaryKey(Long id);
 
-    int updateByPrimaryKeySelective(RechargeRecord record);
-
-    int updateByPrimaryKey(RechargeRecord record);
-
+    /**
+     * 根据用户id分页查询充值记录
+     */
+    List<RechargeRecordVO> selectPageByUid(@Param("uid") Integer uid,
+                                           @Param("offset") Integer offset,
+                                           @Param("pageSize") Integer pageSize);
 }

@@ -13,6 +13,14 @@
         <result property="bidStatus" column="bid_status" jdbcType="INTEGER"/>
     </resultMap>
 
+    <!--用户的投资记录的映射-->
+    <resultMap id="InvestRecordVO" type="com.lwm.common.vo.InvestRecordVO">
+        <id column="id" property="id"/>
+        <result column="product_name" property="productName"/>
+        <result column="bid_money" property="bidMoney"/>
+        <result column="bid_time" property="bidTime"/>
+    </resultMap>
+
     <sql id="Base_Column_List">
         id,prod_id,uid,
         bid_money,bid_time,bid_status
@@ -104,7 +112,7 @@
         ORDER BY money DESC
         LIMIT 0,3
     </select>
-
+    <!--根据产品id分页查投资记录-->
     <select id="selectByProdId" resultType="com.lwm.common.vo.ProductBidInfo">
         SELECT b.id,
                DATE_FORMAT(bid_time, '%Y-%m-%d') AS bidDateTime,
@@ -116,6 +124,18 @@
         WHERE b.prod_id = #{prodId}
         ORDER BY b.bid_time DESC
         LIMIT #{offset}, #{pageSize};
+    </select>
 
+    <!--根据用户id分页查询的投资记录-->
+    <select id="selectPageByUid" resultMap="InvestRecordVO">
+        SELECT b.id,
+               p.product_name,
+               b.bid_money,
+               DATE_FORMAT(b.bid_time, '%Y-%m-%d') AS bid_time
+        FROM b_product_info p
+                 JOIN b_bid_info b ON p.id = b.prod_id
+        WHERE b.uid = #{uid}
+        ORDER BY bid_time DESC
+        LIMIT #{offset},#{pageSize};
     </select>
 </mapper>

@@ -1,6 +1,9 @@
 package com.lwm.dataservice.mapper;
 
-import com.lwm.common.model.IncomeRecord;
+import com.lwm.common.vo.IncomeRecordVO;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author Administrator
@@ -10,16 +13,10 @@ import com.lwm.common.model.IncomeRecord;
 */
 public interface IncomeRecordMapper {
 
-    int deleteByPrimaryKey(Long id);
-
-    int insert(IncomeRecord record);
-
-    int insertSelective(IncomeRecord record);
-
-    IncomeRecord selectByPrimaryKey(Long id);
-
-    int updateByPrimaryKeySelective(IncomeRecord record);
-
-    int updateByPrimaryKey(IncomeRecord record);
-
+    /**
+     * 根据用户id分页查询收益记录
+     */
+    List<IncomeRecordVO> selectPageByUid(@Param("uid") Integer uid,
+                                         @Param("offset") Integer offset,
+                                         @Param("pageSize") Integer pageSize);
 }

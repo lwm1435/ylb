@@ -2,6 +2,7 @@ package com.lwm.dataservice.mapper;
 
 import com.lwm.common.model.BidInfo;
 import com.lwm.common.vo.InvestRank;
+import com.lwm.common.vo.InvestRecordVO;
 import com.lwm.common.vo.ProductBidInfo;
 import org.apache.ibatis.annotations.Param;
 
@@ -44,4 +45,11 @@ public interface BidInfoMapper {
     List<ProductBidInfo> selectByProdId(@Param("prodId") Integer prodId,
                                         @Param("offset") Integer offset,
                                         @Param("pageSize") Integer pageSize);
+
+    /**
+     *  根据用户id分页查询投资记录
+     */
+    List<InvestRecordVO> selectPageByUid(@Param("uid") Integer uid,
+                                         @Param("offset") Integer offset,
+                                         @Param("pageSize") Integer pageSize);
 }

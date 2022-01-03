@@ -10,13 +10,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -224,6 +222,48 @@ public class UserController extends BaseController {
                 webResult.setData(vo);
             }
         }
+        return webResult;
+    }
+
+    @ApiOperation(value = "用户的投资记录、充值记录、收益记录")
+    @GetMapping("/v1/user/record")
+    public WebResult queryUserRecord(@RequestHeader Integer uid,
+                                     @RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,
+                                     @RequestParam(value = "pageSize", required = false, defaultValue = "6") Integer pageSize) {
+        WebResult webResult = WebResult.fail();
+        do {
+            //校验入参
+            if (uid == null || pageNo < 1 || pageSize < 1) {
+                webResult.setEnumCode(Code.PARAM_NULL);
+                break;
+            }
+            //查询投资记录
+            List<InvestRecordVO> investRecords = investService.queryBidRecordByUid(uid,pageNo,pageSize);
+            if (investRecords == null) {
+                webResult.setEnumCode(Code.PRODUCT_NOT_EXISTS);
+                break;
+            }
+            //查询充值记录
+            List<RechargeRecordVO> rechargeRecords = rechargeService.queryRechargeRecordByUid(uid,pageNo,pageSize);
+            if (rechargeRecords == null) {
+                webResult.setEnumCode(Code.PRODUCT_NOT_EXISTS);
+                break;
+            }
+            //查询收益记录
+            List<IncomeRecordVO> incomeRecords = incomeService.queryIncomeRecordByUid(uid,pageNo,pageSize);
+            if (incomeRecords == null) {
+                webResult.setEnumCode(Code.PRODUCT_NOT_EXISTS);
+                break;
+            }
+            //封装数据
+            Map<String,Object> map = new HashMap<>(3);
+            map.put("investRecords",investRecords);
+            map.put("rechargeRecords",rechargeRecords);
+            map.put("incomeRecords",incomeRecords);
+            webResult.setEnumCode(Code.SUCCESS);
+            webResult.setData(map);
+        } while (false);
+
         return webResult;
     }
 }
