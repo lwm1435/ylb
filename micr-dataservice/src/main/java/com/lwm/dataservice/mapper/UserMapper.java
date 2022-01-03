@@ -50,4 +50,5 @@ public interface UserMapper {
      * 更新最后一次登录时间
      */
     void updateLastLoginTime(@Param("date") Date date, @Param("id") Integer id);
+
 }

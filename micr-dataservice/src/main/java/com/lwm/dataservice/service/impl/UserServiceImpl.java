@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService {
                     FinanceAccount account = new FinanceAccount();
                     account.setUid(user.getId());
                     account.setAvailableMoney(new BigDecimal("0"));
-                    accountInsert = accountMapper.insertSelective(account);
+                    accountInsert = accountMapper.insert(account);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
