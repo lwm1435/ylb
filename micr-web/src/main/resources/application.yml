@@ -19,15 +19,5 @@ dubbo:
     retries: 0
     check: false
 
-#短信的配置信息
-jdwx:
-  sms:
-    url: https://way.jd.com/chuangxin/dxjk
-    content: 你的验证码是：%s，3分钟有效
-    appkey: eea99c71098aa5b1fbee5e8b6a4cb7e2
-  real-name:
-    url: https://way.jd.com/yingyan/idcard
-    appkey: eea99c71098aa5b1fbee5e8b6a4cb7e2
-
 #密钥
 jwt-secretkey: 37de4f4e7c324c7296aed4322fd0804d

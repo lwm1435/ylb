@@ -21,5 +21,15 @@ mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
+#短信的配置信息
+jdwx:
+  sms:
+    url: https://way.jd.com/chuangxin/dxjk
+    content: 你的验证码是：%s，3分钟有效
+    appkey: eea99c71098aa5b1fbee5e8b6a4cb7e2
+  real-name:
+    url: https://way.jd.com/yingyan/idcard
+    appkey: eea99c71098aa5b1fbee5e8b6a4cb7e2
+
 #密码加盐
 salt: 47d9d5f2ede04b1e

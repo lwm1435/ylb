@@ -29,10 +29,20 @@ public interface UserService {
     /**
      * 检查手机号是否已注册
      */
-    boolean checkPhone(String phone);
+    boolean checkByPhone(String phone);
 
     /**
      * 登录信息验证
      */
     User checkLogin(String phone, String password);
+
+    /**
+     * 根据id查询用户信息
+     */
+    User QueryUserById(Integer uid);
+
+    /**
+     * 用户实名服务
+     */
+    boolean realName(Integer uid, String name, String idCard) throws Exception;
 }

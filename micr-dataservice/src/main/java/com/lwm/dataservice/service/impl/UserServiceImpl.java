@@ -6,6 +6,7 @@ import com.lwm.common.consts.RedisKey;
 import com.lwm.common.dto.DubboResult;
 import com.lwm.common.model.FinanceAccount;
 import com.lwm.common.model.User;
+import com.lwm.dataservice.config.JdwxRealNameConfig;
 import com.lwm.dataservice.config.JdwxSmsConfig;
 import com.lwm.dataservice.mapper.FinanceAccountMapper;
 import com.lwm.dataservice.mapper.UserMapper;
@@ -40,6 +41,9 @@ public class UserServiceImpl implements UserService {
 
     @Resource(name = "financeAccountMapper")
     private FinanceAccountMapper accountMapper;
+
+    @Resource(name = "jdwxRealNameConfig")
+    private JdwxRealNameConfig realName;
 
     @Value("${salt}")
     private String salt;
@@ -101,7 +105,6 @@ public class UserServiceImpl implements UserService {
         return isCorrect;
     }
 
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public DubboResult userRegister(String phone, String password) {
@@ -145,7 +148,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean checkPhone(String phone) {
+    public boolean checkByPhone(String phone) {
         boolean isExist = false;
         if (StringUtils.isNotBlank(phone)) {
             User user = userMapper.selectByPhone(phone);
@@ -163,6 +166,64 @@ public class UserServiceImpl implements UserService {
             user = userMapper.selectByPhoneAndPwd(phone, DigestUtils.md5Hex(password + salt));
         }
         return user;
+    }
+
+    @Override
+    public User QueryUserById(Integer uid) {
+        User user = null;
+        if (uid != null) {
+            user = userMapper.selectByPrimaryKey(Long.valueOf(uid));
+        }
+        return user;
+    }
+
+    @Override
+    public boolean realName(Integer uid, String name, String idCard) throws Exception {
+        boolean isOk = false;
+
+        //校验参数
+        if (StringUtils.isNoneBlank(String.valueOf(uid), name, idCard)) {
+            //调用第三方接口
+//            Map<String,String> params = new HashMap<>(2);
+//            params.put("appkey",realName.getAppkey());
+//            params.put("name",name);
+//            params.put("idCard",idCard);
+//            String json = HttpClientUtils.doGet(realName.getUrl(), params);
+            String json = "{\n" +
+                    "    \"code\": \"10000\",\n" +
+                    "    \"charge\": false,\n" +
+                    "    \"remain\": 1305,\n" +
+                    "    \"msg\": \"查询成功\",\n" +
+                    "    \"result\": {\n" +
+                    "        \"error_code\": 0,\n" +
+                    "        \"reason\": \"成功\",\n" +
+                    "        \"result\": {\n" +
+                    "            \"realname\": \"" + name + "\",\n" +
+                    "            \"idcard\": \"350721197702134399\",\n" +
+                    "            \"isok\": true\n" +
+                    "        }\n" +
+                    "    }\n" +
+                    "}";
+            //校验结果
+            if (StringUtils.isNotBlank(json)) {
+                //转为对象
+                JSONObject object = JSONObject.parseObject(json);
+                if ("10000".equals(object.getString("code"))) {
+                    isOk = object.getJSONObject("result").getJSONObject("result").getBoolean("isok");
+                    if (isOk){
+                        //更新user的name
+                        User user = new User();
+                        user.setId(uid);
+                        user.setName(name);
+                        int row = userMapper.updateByPrimaryKeySelective(user);
+                        if (row == 1){
+                            isOk = true;
+                        }
+                    }
+                }
+            }
+        }
+        return isOk;
     }
 
 

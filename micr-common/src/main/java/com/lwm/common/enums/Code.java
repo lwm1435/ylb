@@ -47,7 +47,11 @@ public enum Code {
     /**
      * 无需重复实名认证
      */
-    NOT_RETRY_REALNAME(1008,"无需重复实名认证");
+    NOT_RETRY_REALNAME(1008,"无需重复实名认证"),
+    /**
+     * 无需重复实名认证
+     */
+    PHONE_IS_DIFFERENT(1009,"实名手机号和注册手机号不一致");
 
     /**
      * 状态码

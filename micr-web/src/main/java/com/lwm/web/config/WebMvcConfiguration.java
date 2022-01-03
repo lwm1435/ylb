@@ -1,8 +1,14 @@
 package com.lwm.web.config;
 
+import com.lwm.web.interceptor.TokenInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import javax.annotation.Resource;
 
 /**
  * @author lwm1435@163.com
@@ -12,22 +18,20 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration //相当于SpringMVC配置文件
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
-//    @Value("${jwt-secretkey}")
-//    private String sectetkey;
-//
-//    @Autowired
-//    private StringRedisTemplate redisTemplate;
+    @Resource
+    private TokenInterceptor tokenInterceptor;
 
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        //创建token拦截器
-//        TokenInterceptor tokenInterceptor = new TokenInterceptor(sectetkey,redisTemplate);
-//        //设置拦截路径
-//        String[] addPath = {"/v1/user/realname","/v1/user/info","/v1/invest/product",
-//                "/v1/user/record","/v1/user/logout"};
-//        //注册拦截器
-//       registry.addInterceptor(tokenInterceptor).addPathPatterns(addPath);
-//    }
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        //设置拦截路径
+        String[] addPath = {"/v1/user/realname","/v1/user/info","/v1/invest/product",
+                "/v1/user/record","/v1/user/logout"};
+        //注册拦截器
+       registry.addInterceptor(tokenInterceptor).addPathPatterns(addPath);
+    }
 
     /**
      * 设置跨域请求
