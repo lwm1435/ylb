@@ -26,4 +26,13 @@ public interface UserMapper {
      * 查询用户总量
      */
     Long selectTotalUser();
+
+    /**
+     * 根据phone查询user
+     */
+    User selectByPhone(String phone);
+
+
+
+
 }

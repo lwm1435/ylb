@@ -13,7 +13,7 @@ dubbo:
   registry:
     address: zookeeper://localhost:2181
   provider:
-    timeout: 20000
+    timeout: 40000
     retries: 0
 
 mybatis:

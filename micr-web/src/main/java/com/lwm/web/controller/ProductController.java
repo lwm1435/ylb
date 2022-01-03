@@ -20,7 +20,7 @@ import java.util.Map;
  * @date 2022-01-02 20:59
  * @description
  */
-@Api("产品服务")
+@Api("产品信息接口")
 @RestController
 public class ProductController extends BaseController{
 

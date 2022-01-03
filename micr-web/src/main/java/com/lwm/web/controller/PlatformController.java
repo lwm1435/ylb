@@ -19,7 +19,7 @@ import java.util.Map;
  * @date 2022-01-02 00:01
  * @description
  */
-@Api(tags = "盈利宝平台首页信息")
+@Api(tags = "平台首页接口")
 @RestController
 public class PlatformController extends BaseController {
 

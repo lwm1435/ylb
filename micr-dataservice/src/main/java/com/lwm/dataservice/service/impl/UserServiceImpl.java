@@ -3,13 +3,23 @@ package com.lwm.dataservice.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.lwm.api.service.UserService;
 import com.lwm.common.consts.RedisKey;
+import com.lwm.common.dto.DubboResult;
+import com.lwm.common.model.FinanceAccount;
+import com.lwm.common.model.User;
 import com.lwm.dataservice.config.JdwxSmsConfig;
+import com.lwm.dataservice.mapper.FinanceAccountMapper;
+import com.lwm.dataservice.mapper.UserMapper;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -19,12 +29,20 @@ import java.util.concurrent.TimeUnit;
  */
 @DubboService(interfaceClass = UserService.class, version = "1.0")
 public class UserServiceImpl implements UserService {
+    @Resource
+    private UserMapper userMapper;
 
     @Resource(name = "jdwxSmsConfig")
     private JdwxSmsConfig smsCode;
 
     @Resource(name = "stringRedisTemplate")
     private StringRedisTemplate redis;
+
+    @Resource(name = "financeAccountMapper")
+    private FinanceAccountMapper accountMapper;
+
+    @Value("${salt}")
+    private String salt;
 
     @Override
     public boolean sendSmsCode(String phone) throws Exception {
@@ -66,6 +84,76 @@ public class UserServiceImpl implements UserService {
             }
         }
         return isSend;
+    }
+
+    @Override
+    public boolean checkCode(String phone, String code) {
+        //任意一个为空返回false
+        if (StringUtils.isAnyBlank(phone, code)) {
+            return false;
+        }
+        boolean isCorrect = false;
+        //从redis中获取code
+        String redisCode = redis.opsForValue().get(RedisKey.SMS_CODE_REGISTER + phone);
+        if (code.equals(redisCode)) {
+            isCorrect = true;
+        }
+        return isCorrect;
+    }
+
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public DubboResult userRegister(String phone, String password) {
+        DubboResult result = DubboResult.fail();
+        if (StringUtils.isNoneBlank(phone, password)) {
+            //查询用户是否已存在
+            User user = userMapper.selectByPhone(phone);
+            if (user == null) {
+                //插入一条用户数据
+                user = new User();
+                user.setPhone(phone);
+                user.setAddTime(new Date());
+                //密码加盐后md5加密（前端md5一次，这里第二次）
+                user.setLoginPassword(DigestUtils.md5Hex(password + salt));
+                int userInsert = 0, accountInsert = 0;
+                try {
+                    userInsert = userMapper.insertSelective(user);
+                    //插入一条用户的账户信息
+                    FinanceAccount account = new FinanceAccount();
+                    account.setUid(user.getId());
+                    account.setAvailableMoney(new BigDecimal("0"));
+                    accountInsert = accountMapper.insertSelective(account);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (userInsert == 0 || accountInsert == 0) {
+                    result.setMsg("手机号已注册");
+                } else {
+                    //注册成功
+                    result.setInvoke(true);
+                    result.setCode(1000);
+                    result.setMsg("注册成功");
+                }
+
+            } else {
+                result.setMsg("手机号已注册");
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public boolean checkPhone(String phone) {
+        boolean isExist = false;
+        if (StringUtils.isNotBlank(phone)) {
+            User user = userMapper.selectByPhone(phone);
+            if (user != null) {
+                isExist = true;
+            }
+        }
+        return isExist;
     }
 
 

@@ -26,24 +26,28 @@ public enum Code {
      */
     SMS_CODE_INVALID(1003,"验证码无效"),
     /**
+     * 验证码无效
+     */
+    USER_PHONE_EXISTING(1004,"手机号已注册"),
+    /**
      * 登录信息有误
      */
-    USER_LOGIN_INVALID(1004,"登录信息有误"),
+    USER_LOGIN_INVALID(1005,"登录信息有误"),
 
     /**
      * 权限认证无效
      */
-    TOKEN_INVALID(1005,"权限认证无效"),
+    TOKEN_INVALID(1006,"权限认证无效"),
 
     /**
      * 请先进行实名认证
      */
-    REQUIRED_REALNAME(1006,"请先进行实名认证"),
+    REQUIRED_REALNAME(1007,"请先进行实名认证"),
 
     /**
      * 无需重复实名认证
      */
-    NOT_RETRY_REALNAME(1007,"无需重复实名认证");
+    NOT_RETRY_REALNAME(1008,"无需重复实名认证");
 
     /**
      * 状态码
