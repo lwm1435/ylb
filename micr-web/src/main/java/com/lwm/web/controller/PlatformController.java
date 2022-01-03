@@ -23,7 +23,7 @@ import java.util.Map;
 @RestController
 public class PlatformController extends BaseController {
 
-    @ApiOperation(value = "平台三个数据", notes = "平台基本信息注册用户数， 利率平均值， 累计成交金额")
+    @ApiOperation(value = "平台首页的三个数据", notes = "平台基本信息注册用户数， 利率平均值， 累计成交金额")
     @GetMapping("/v1/plat/info")
     public WebResult queryIndexInfo(){
         WebResult webResult = WebResult.fail();

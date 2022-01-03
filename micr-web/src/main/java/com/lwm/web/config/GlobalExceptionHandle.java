@@ -1,4 +1,4 @@
-package com.lwm.web.settings;
+package com.lwm.web.config;
 
 import com.lwm.common.dto.WebResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;

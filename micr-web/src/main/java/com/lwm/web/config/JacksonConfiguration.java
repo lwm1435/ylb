@@ -1,4 +1,4 @@
-package com.lwm.web.settings;
+package com.lwm.web.config;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
