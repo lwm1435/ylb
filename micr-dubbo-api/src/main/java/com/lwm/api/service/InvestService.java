@@ -1,5 +1,6 @@
 package com.lwm.api.service;
 
+import com.lwm.common.dto.DubboResult;
 import com.lwm.common.vo.InvestRank;
 import com.lwm.common.vo.InvestRecordVO;
 import com.lwm.common.vo.ProductBidInfo;
@@ -27,4 +28,9 @@ public interface InvestService {
      * 根据用户id分页查询投资记录
      */
     List<InvestRecordVO> queryBidRecordByUid(Integer uid,Integer pageNo,Integer pageSize);
+
+    /**
+     * 用户投资产品
+     */
+    DubboResult InvestProduct(Integer uid, Integer productId, Integer money);
 }

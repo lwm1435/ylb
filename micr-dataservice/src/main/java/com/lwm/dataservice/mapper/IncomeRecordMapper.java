@@ -1,5 +1,7 @@
 package com.lwm.dataservice.mapper;
 
+
+import com.lwm.common.model.IncomeRecord;
 import com.lwm.common.vo.IncomeRecordVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,6 +14,12 @@ import java.util.List;
 * @Entity com.lwm.common.model.IncomeRecord
 */
 public interface IncomeRecordMapper {
+
+    int insertSelective(IncomeRecord incomeRecord);
+
+    int insert(IncomeRecord incomeRecord);
+
+
 
     /**
      * 根据用户id分页查询收益记录

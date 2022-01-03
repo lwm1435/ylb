@@ -39,9 +39,9 @@
     <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.lwm.common.model.BidInfo"
             useGeneratedKeys="true">
         insert into b_bid_info
-        ( id, prod_id, uid
+        ( prod_id, uid
         , bid_money, bid_time, bid_status)
-        values ( #{id,jdbcType=INTEGER}, #{prodId,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}
+        values ( #{prodId,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}
                , #{bidMoney,jdbcType=DECIMAL}, #{bidTime,jdbcType=TIMESTAMP}, #{bidStatus,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.lwm.common.model.BidInfo"
