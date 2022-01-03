@@ -1,6 +1,7 @@
 package com.lwm.dataservice.mapper;
 
 import com.lwm.common.model.User;
+import org.apache.ibatis.annotations.Param;
 
 /**
 * @author Administrator
@@ -32,7 +33,8 @@ public interface UserMapper {
      */
     User selectByPhone(String phone);
 
-
-
-
+    /**
+     * 根据手机号和密码查询user
+     */
+    User selectByPhoneAndPwd(@Param("phone") String phone, @Param("password") String password);
 }

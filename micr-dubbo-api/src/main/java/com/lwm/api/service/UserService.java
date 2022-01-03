@@ -1,6 +1,7 @@
 package com.lwm.api.service;
 
 import com.lwm.common.dto.DubboResult;
+import com.lwm.common.model.User;
 
 /**
  * @author lwm1435@163.com
@@ -29,4 +30,9 @@ public interface UserService {
      * 检查手机号是否已注册
      */
     boolean checkPhone(String phone);
+
+    /**
+     * 登录信息验证
+     */
+    User checkLogin(String phone, String password);
 }

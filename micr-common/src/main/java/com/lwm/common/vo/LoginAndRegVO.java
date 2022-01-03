@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @description
  */
 @Data
-public class UserRegister implements Serializable {
+public class LoginAndRegVO implements Serializable {
     private String phone;
     private String password;
     private String code;

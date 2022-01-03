@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
             if ("10000".equals(obj.getString("code")) &&
                     "Success".equals(obj.getJSONObject("result").getString("ReturnStatus"))) {
                 //存储到redis三分钟 存储的key为常量+手机号 value为验证码
-                redis.opsForValue().set(RedisKey.SMS_CODE_REGISTER + phone, code, 3, TimeUnit.MINUTES);
+                redis.opsForValue().set(RedisKey.SMS_CODE_REGISTER + phone, code, 10, TimeUnit.MINUTES);
                 isSend = true;
             }
         }
@@ -154,6 +154,15 @@ public class UserServiceImpl implements UserService {
             }
         }
         return isExist;
+    }
+
+    @Override
+    public User checkLogin(String phone, String password) {
+        User user = null;
+        if (StringUtils.isNoneBlank(phone, password)) {
+            user = userMapper.selectByPhoneAndPwd(phone, DigestUtils.md5Hex(password + salt));
+        }
+        return user;
     }
 
 

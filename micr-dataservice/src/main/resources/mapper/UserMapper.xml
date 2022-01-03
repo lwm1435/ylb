@@ -110,10 +110,16 @@
         FROM u_user
     </select>
     <!--根据phone查询user-->
-    <select id="selectByPhone" resultType="com.lwm.common.model.User">
+    <select id="selectByPhone" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List"/>
         FROM u_user
         WHERE phone = #{phone}
+    </select>
+    <!--根据手机号和密码查询user-->
+    <select id="selectByPhoneAndPwd" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM u_user
+        WHERE phone = #{phone} AND login_password = #{password}
     </select>
 
 </mapper>

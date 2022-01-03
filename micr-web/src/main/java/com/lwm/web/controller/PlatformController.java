@@ -27,6 +27,7 @@ public class PlatformController extends BaseController {
     @GetMapping("/v1/plat/info")
     public WebResult queryIndexInfo(){
         WebResult webResult = WebResult.fail();
+        //平台首页的三个数据
         PlatformInfo platformInfo = platformService.queryIndexInfo();
         if (platformInfo != null){
             webResult.setEnumCode(Code.SUCCESS);
