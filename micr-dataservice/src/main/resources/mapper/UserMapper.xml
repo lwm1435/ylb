@@ -15,6 +15,15 @@
         <result property="headerImage" column="header_image" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <resultMap id="UserAndAccount" type="com.lwm.common.vo.UserAccountBO">
+        <id property="uid" column="id"/>
+        <result property="name" column="name"/>
+        <result property="phone" column="phone"/>
+        <result property="headerImage" column="header_image"/>
+        <result property="lastLoginTime" column="last_login_time"/>
+        <result property="availableMoney" column="available_money"/>
+    </resultMap>
+
     <sql id="Base_Column_List">
         id,phone,login_password,
         name,id_card,add_time,
@@ -104,6 +113,13 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
+    <!--更新最后一次登录时间-->
+    <update id="updateLastLoginTime">
+        UPDATE u_user
+        SET last_login_time = #{date}
+        WHERE id = #{id}
+    </update>
+
     <!--查询用户总量-->
     <select id="selectTotalUser" resultType="java.lang.Long">
         SELECT COUNT(*)
@@ -111,15 +127,30 @@
     </select>
     <!--根据phone查询user-->
     <select id="selectByPhone" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List"/>
+        SELECT
+        <include refid="Base_Column_List"/>
         FROM u_user
         WHERE phone = #{phone}
     </select>
     <!--根据手机号和密码查询user-->
     <select id="selectByPhoneAndPwd" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List"/>
+        SELECT
+        <include refid="Base_Column_List"/>
         FROM u_user
         WHERE phone = #{phone} AND login_password = #{password}
+    </select>
+    <!--根据用户id查询用户和账户信息-->
+    <select id="selectUserAndAccountInfoByUid" resultMap="UserAndAccount">
+        SELECT u.id,
+               u.`name`,
+               u.phone,
+               u.header_image,
+               u.last_login_time,
+               a.available_money
+        FROM u_user u
+                 JOIN u_finance_account a
+                      ON u.id = a.uid
+        WHERE u.id = #{uid}
     </select>
 
 </mapper>

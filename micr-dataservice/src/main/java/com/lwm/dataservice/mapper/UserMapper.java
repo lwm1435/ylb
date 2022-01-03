@@ -1,7 +1,10 @@
 package com.lwm.dataservice.mapper;
 
 import com.lwm.common.model.User;
+import com.lwm.common.vo.UserAccountBO;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
 
 /**
 * @author Administrator
@@ -37,4 +40,14 @@ public interface UserMapper {
      * 根据手机号和密码查询user
      */
     User selectByPhoneAndPwd(@Param("phone") String phone, @Param("password") String password);
+
+    /**
+     * 根据用户id查询用户和账户信息
+     */
+    UserAccountBO selectUserAndAccountInfoByUid(Integer uid);
+
+    /**
+     * 更新最后一次登录时间
+     */
+    void updateLastLoginTime(@Param("date") Date date, @Param("id") Integer id);
 }

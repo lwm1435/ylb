@@ -5,9 +5,7 @@ import com.lwm.common.dto.WebResult;
 import com.lwm.common.enums.Code;
 import com.lwm.common.model.User;
 import com.lwm.common.utils.JwtUtil;
-import com.lwm.common.vo.RealNameVO;
-import com.lwm.common.vo.UserVO;
-import com.lwm.common.vo.LoginAndRegVO;
+import com.lwm.common.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -165,43 +164,66 @@ public class UserController extends BaseController {
         String phone = realNameVO.getPhone();
         do {
             //校验参数
-            if (StringUtils.isAnyBlank(name,idCard,code,phone)){
+            if (StringUtils.isAnyBlank(name, idCard, code, phone)) {
                 webResult.setEnumCode(Code.PARAM_NULL);
                 break;
             }
             //校验验证码
-            if (!(userService.checkCode(phone,code))){
+            if (!(userService.checkCode(phone, code))) {
                 webResult.setEnumCode(Code.SMS_CODE_INVALID);
                 break;
             }
             //检查用户是否存在
             User user = userService.QueryUserById(uid);
-            if (user == null){
+            if (user == null) {
                 webResult.setEnumCode(Code.USER_LOGIN_INVALID);
                 break;
             }
             //检查用户实名的手机号和用户注册时的手机号是否匹配
-            if (!phone.equals(user.getPhone())){
+            if (!phone.equals(user.getPhone())) {
                 webResult.setEnumCode(Code.PHONE_IS_DIFFERENT);
                 break;
             }
             //检查用户是否已经实名
-            if (StringUtils.isNotBlank(user.getName())){
+            if (StringUtils.isNotBlank(user.getName())) {
                 webResult.setEnumCode(Code.NOT_RETRY_REALNAME);
                 break;
             }
             //调用实名服务
-           if (userService.realName(uid, name, idCard)){
-               //封装数据
-               UserVO userVO = new UserVO();
-               userVO.setUid(uid);
-               userVO.setName(name);
-               userVO.setPhone(phone);
-               webResult.setEnumCode(Code.SUCCESS);
-               webResult.setData(userVO);
-           }
-        }while (false);
+            if (userService.realName(uid, name, idCard)) {
+                //封装数据
+                UserVO userVO = new UserVO();
+                userVO.setUid(uid);
+                userVO.setName(name);
+                userVO.setPhone(phone);
+                webResult.setEnumCode(Code.SUCCESS);
+                webResult.setData(userVO);
+            }
+        } while (false);
 
+        return webResult;
+    }
+
+    @ApiOperation(value = "查询用户以及账户余额")
+    @GetMapping("/v1/user/info")
+    public WebResult queryUserAccountInfo(@RequestHeader Integer uid) {
+        WebResult webResult = WebResult.fail();
+        if (uid != null) {
+            //查询用户和账户信息
+            UserAccountBO bo = userService.queryUserAccountInfo(uid);
+            if (bo != null) {
+                //封装数据
+                UserAccountVO vo = new UserAccountVO();
+                vo.setUid(uid);
+                vo.setName(bo.getName());
+                vo.setPhone(bo.getPhone());
+                vo.setLastLoginTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                        .format(bo.getLastLoginTime()));
+                vo.setAvailableMoney(bo.getAvailableMoney());
+                webResult.setEnumCode(Code.SUCCESS);
+                webResult.setData(vo);
+            }
+        }
         return webResult;
     }
 }

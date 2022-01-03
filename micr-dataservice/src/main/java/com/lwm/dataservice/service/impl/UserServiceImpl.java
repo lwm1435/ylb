@@ -6,6 +6,7 @@ import com.lwm.common.consts.RedisKey;
 import com.lwm.common.dto.DubboResult;
 import com.lwm.common.model.FinanceAccount;
 import com.lwm.common.model.User;
+import com.lwm.common.vo.UserAccountBO;
 import com.lwm.dataservice.config.JdwxRealNameConfig;
 import com.lwm.dataservice.config.JdwxSmsConfig;
 import com.lwm.dataservice.mapper.FinanceAccountMapper;
@@ -160,10 +161,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public User checkLogin(String phone, String password) {
         User user = null;
         if (StringUtils.isNoneBlank(phone, password)) {
             user = userMapper.selectByPhoneAndPwd(phone, DigestUtils.md5Hex(password + salt));
+            if (user != null) {
+                //更新最后一次登录时间
+                userMapper.updateLastLoginTime(new Date(), user.getId());
+            }
         }
         return user;
     }
@@ -224,6 +230,15 @@ public class UserServiceImpl implements UserService {
             }
         }
         return isOk;
+    }
+
+    @Override
+    public UserAccountBO queryUserAccountInfo(Integer uid) {
+        UserAccountBO bo = null;
+        if (uid != null){
+            bo =  userMapper.selectUserAndAccountInfoByUid(uid);
+        }
+        return bo;
     }
 
 

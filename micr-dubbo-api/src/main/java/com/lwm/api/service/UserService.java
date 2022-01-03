@@ -2,6 +2,7 @@ package com.lwm.api.service;
 
 import com.lwm.common.dto.DubboResult;
 import com.lwm.common.model.User;
+import com.lwm.common.vo.UserAccountBO;
 
 /**
  * @author lwm1435@163.com
@@ -45,4 +46,9 @@ public interface UserService {
      * 用户实名服务
      */
     boolean realName(Integer uid, String name, String idCard) throws Exception;
+
+    /**
+     * 根据用户id查询用户和账户信息
+     */
+    UserAccountBO queryUserAccountInfo(Integer uid);
 }
