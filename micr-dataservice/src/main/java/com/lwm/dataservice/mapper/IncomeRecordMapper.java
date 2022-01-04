@@ -5,6 +5,7 @@ import com.lwm.common.model.IncomeRecord;
 import com.lwm.common.vo.IncomeRecordVO;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,10 +16,11 @@ import java.util.List;
 */
 public interface IncomeRecordMapper {
 
-    int insertSelective(IncomeRecord incomeRecord);
 
+    /**
+     * 插入一条记录
+     */
     int insert(IncomeRecord incomeRecord);
-
 
 
     /**
@@ -27,4 +29,14 @@ public interface IncomeRecordMapper {
     List<IncomeRecordVO> selectPageByUid(@Param("uid") Integer uid,
                                          @Param("offset") Integer offset,
                                          @Param("pageSize") Integer pageSize);
+
+    /**
+     * 查询到期的未返还的收益记录 1.状态为0未返还  2.前一天的收益计划
+     */
+    List<IncomeRecord> selectByIncomeDateAndStatus(Date preDay);
+
+    /**
+     * 根据id可选更新
+     */
+    int updateByIdSelective(IncomeRecord incomeRecord);
 }

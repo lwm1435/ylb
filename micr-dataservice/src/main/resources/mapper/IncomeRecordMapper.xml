@@ -29,7 +29,7 @@
         bid_id,bid_money,income_date,
         income_money,income_status
     </sql>
-
+    <!--插入一条记录-->
     <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
         insert into b_income_record
         ( uid, product_id
@@ -39,55 +39,33 @@
                , #{bidId,jdbcType=INTEGER}, #{bidMoney,jdbcType=DECIMAL}, #{incomeDate,jdbcType=DATE}
                , #{incomeMoney,jdbcType=DECIMAL}, #{incomeStatus,jdbcType=INTEGER})
     </insert>
-    <insert id="insertSelective" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
-        insert into b_income_record
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">id,</if>
-            <if test="uid != null">uid,</if>
-            <if test="productId != null">product_id,</if>
-            <if test="bidId != null">bid_id,</if>
-            <if test="bidMoney != null">bid_money,</if>
-            <if test="incomeDate != null">income_date,</if>
-            <if test="incomeMoney != null">income_money,</if>
-            <if test="incomeStatus != null">income_status,</if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">#{id,jdbcType=INTEGER},</if>
-            <if test="uid != null">#{uid,jdbcType=INTEGER},</if>
-            <if test="productId != null">#{productId,jdbcType=INTEGER},</if>
-            <if test="bidId != null">#{bidId,jdbcType=INTEGER},</if>
-            <if test="bidMoney != null">#{bidMoney,jdbcType=DECIMAL},</if>
-            <if test="incomeDate != null">#{incomeDate,jdbcType=DATE},</if>
-            <if test="incomeMoney != null">#{incomeMoney,jdbcType=DECIMAL},</if>
-            <if test="incomeStatus != null">#{incomeStatus,jdbcType=INTEGER},</if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective">
-        update b_income_record
+    <!--根据id可选更新-->
+    <update id="updateByIdSelective">
+        UPDATE b_income_record
         <set>
             <if test="uid != null">
-                uid = #{uid,jdbcType=INTEGER},
+                uid = #{uid},
             </if>
             <if test="productId != null">
-                product_id = #{productId,jdbcType=INTEGER},
+                product_id = #{productId},
             </if>
             <if test="bidId != null">
-                bid_id = #{bidId,jdbcType=INTEGER},
+                bid_id = #{bidId},
             </if>
             <if test="bidMoney != null">
-                bid_money = #{bidMoney,jdbcType=DECIMAL},
+                bid_money = #{bidMoney},
             </if>
             <if test="incomeDate != null">
-                income_date = #{incomeDate,jdbcType=DATE},
+                income_date = #{incomeDate},
             </if>
             <if test="incomeMoney != null">
-                income_money = #{incomeMoney,jdbcType=DECIMAL},
+                income_money = #{incomeMoney},
             </if>
             <if test="incomeStatus != null">
-                income_status = #{incomeStatus,jdbcType=INTEGER},
+                income_status = #{incomeStatus}
             </if>
         </set>
-        where id = #{id,jdbcType=INTEGER}
+        WHERE id = #{id}
     </update>
 
     <!--根据用户id分页查询收益记录-->
@@ -102,6 +80,14 @@
         WHERE i.uid = #{uid}
         ORDER BY income_date DESC
         LIMIT #{offset}, #{pageSize};
+    </select>
+    <!--查询到期的未返还的收益记录 1.状态为0未返还  2.前一天的收益计划-->
+    <select id="selectByIncomeDateAndStatus" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM b_income_record
+        WHERE income_status = 0
+        AND income_date = #{preDay}
     </select>
 
 </mapper>

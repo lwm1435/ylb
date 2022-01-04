@@ -28,4 +28,9 @@ public interface FinanceAccountMapper {
      * 插入一条账户记录
      */
     int insert(FinanceAccount account);
+
+    /**
+     * 根据uid，bidMoney，incomeMoney更新每个用户账户的余额
+     */
+    int updateBalanceByUid(@Param("uid") Integer uid, @Param("bidMoney") BigDecimal bidMoney, @Param("incomeMoney") BigDecimal incomeMoney);
 }

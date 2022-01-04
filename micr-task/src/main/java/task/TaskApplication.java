@@ -18,6 +18,6 @@ public class TaskApplication {
     public static void main(String[] args) {
         ConfigurableApplicationContext run = SpringApplication.run(TaskApplication.class, args);
         TaskManager taskManager = run.getBean("taskManager", TaskManager.class);
-        taskManager.handleIncomePlan();
+        taskManager.handleIncomeBack();
     }
 }

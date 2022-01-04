@@ -29,7 +29,7 @@ public class YLBConst {
 
     /***************收益记录状态************************/
     /*计划*/
-    public static final int INCOME_STATUS_PLAN = 1;
+    public static final int INCOME_STATUS_PLAN = 0;
     /*已返还*/
-    public static final int INCOME_STATUS_BACK = 2;
+    public static final int INCOME_STATUS_BACK = 1;
 }

@@ -25,6 +25,12 @@
         SET available_money = available_money - #{investMoney}
         WHERE uid = #{uid}
     </update>
+    <!--根据uid，bidMoney，incomeMoney更新每个用户账户的余额-->
+    <update id="updateBalanceByUid">
+        UPDATE u_finance_account
+        SET available_money = available_money + #{incomeMoney} + #{bidMoney}
+        WHERE uid = #{uid}
+    </update>
 
     <!--查询用户资金账户 添加行锁，事务结束前其他线程访问不了这一行的数据-->
     <select id="selectByUidForUpdate" resultMap="BaseResultMap">

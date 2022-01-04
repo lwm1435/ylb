@@ -7,6 +7,7 @@ import com.lwm.common.model.IncomeRecord;
 import com.lwm.common.model.ProductInfo;
 import com.lwm.common.vo.IncomeRecordVO;
 import com.lwm.dataservice.mapper.BidInfoMapper;
+import com.lwm.dataservice.mapper.FinanceAccountMapper;
 import com.lwm.dataservice.mapper.IncomeRecordMapper;
 import com.lwm.dataservice.mapper.ProductInfoMapper;
 import org.apache.commons.lang3.time.DateUtils;
@@ -33,6 +34,8 @@ public class IncomeServiceImpl implements IncomeService {
     private ProductInfoMapper prodMapper;
     @Resource(name = "bidInfoMapper")
     private BidInfoMapper bidMapper;
+    @Resource(name = "financeAccountMapper")
+    private FinanceAccountMapper accountMapper;
 
     @Override
     public List<IncomeRecordVO> queryIncomeRecordByUid(Integer uid, Integer pageNo, Integer pageSize) {
@@ -59,7 +62,7 @@ public class IncomeServiceImpl implements IncomeService {
         int row;
         Integer pId, pType, cycle;
         Date fullTime, incomeDate;
-        BigDecimal dayRate,incomeMoney;
+        BigDecimal dayRate, incomeMoney;
         for (ProductInfo pInfo : productInfos) {
             //产品id
             pId = pInfo.getId();
@@ -90,7 +93,7 @@ public class IncomeServiceImpl implements IncomeService {
             IncomeRecord incomeRecord = new IncomeRecord();
             incomeRecord.setProductId(pId);
             incomeRecord.setIncomeDate(incomeDate);
-            incomeRecord.setIncomeStatus(YLBConst.INCOME_STATUS_PLAN);//生成收益计划状态--1
+            incomeRecord.setIncomeStatus(YLBConst.INCOME_STATUS_PLAN);//生成收益计划状态--0
 
             //遍历每笔投资计算利息和到期时间生成收益记录
             for (BidInfo bInfo : bidInfos) {
@@ -103,16 +106,41 @@ public class IncomeServiceImpl implements IncomeService {
                 incomeRecord.setIncomeMoney(incomeMoney);
                 //插入收益记录表 有问题抛异常回滚
                 row = incomeMapper.insert(incomeRecord);
-                if (row!=1){
+                if (row != 1) {
                     throw new RuntimeException("生成收益记录异常");
                 }
             }
             //更新产品的状态为2--已生成收益计划
             pInfo.setProductStatus(YLBConst.PRODUCT_STATUS_PLAN);
             row = prodMapper.updateByPrimaryKeySelective(pInfo);
-            if (row!=1){
+            if (row != 1) {
                 throw new RuntimeException("更新产品状态异常");
             }
         }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public synchronized void incomeBack() {
+        //查询到期的未返还的收益记录 1.状态为0未返还  2.前一天的收益计划
+        Date preDay = DateUtils.addDays(DateUtils.truncate(new Date(), Calendar.DATE), -1);
+        List<IncomeRecord> incomeRecords = incomeMapper.selectByIncomeDateAndStatus(preDay);
+
+        //遍历收益记录,根据uid，bidMoney，incomeMoney更新每个用户账户的余额
+        int row;
+        for (IncomeRecord incomeRecord : incomeRecords) {
+            row = accountMapper.updateBalanceByUid(incomeRecord.getUid(),
+                    incomeRecord.getBidMoney(), incomeRecord.getIncomeMoney());
+            if (row != 1){
+                throw new RuntimeException("更行用户账户余额异常");
+            }
+            //更新该收益的收益状态为1---已返还
+            incomeRecord.setIncomeStatus(YLBConst.INCOME_STATUS_BACK);
+            row = incomeMapper.updateByIdSelective(incomeRecord);
+            if (row != 1){
+                throw  new RuntimeException("更新收益记录的状态信息异常");
+            }
+        }
+
     }
 }

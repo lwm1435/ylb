@@ -17,8 +17,12 @@ public interface IncomeService {
     List<IncomeRecordVO> queryIncomeRecordByUid(Integer uid, Integer pageNo, Integer pageSize);
 
     /**
-     * 生成收益计划
+     * 生成收益计划定时任务服务
      */
     void generateIncomePlan();
 
+    /**
+     * 收益返还定时任务服务
+     */
+    void incomeBack();
 }

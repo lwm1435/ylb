@@ -29,6 +29,6 @@ public class TaskManager {
     @Scheduled(cron = "0 0 3 * * ?")
     public void handleIncomeBack(){
         System.out.println("收益返还执行");
-       // incomeService.incomeBack();
+        incomeService.incomeBack();
     }
 }
