@@ -8,6 +8,6 @@ dubbo:
   registry:
     address: zookeeper://localhost:2181
   consumer:
-    timeout: 40000
+#    timeout: 40000
     retries: 0
     check: false

@@ -15,4 +15,10 @@ public interface IncomeService {
      *  根据用户id分页查询收益记录
      */
     List<IncomeRecordVO> queryIncomeRecordByUid(Integer uid, Integer pageNo, Integer pageSize);
+
+    /**
+     * 生成收益计划
+     */
+    void generateIncomePlan();
+
 }

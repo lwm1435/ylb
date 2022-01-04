@@ -4,6 +4,7 @@ import com.lwm.common.model.ProductInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -40,4 +41,9 @@ public interface ProductInfoMapper {
      * 查询总记录数
      */
     int selectCountByType(Integer type);
+
+    /**
+     *  根据产品状态和满标时间获取前一天满标的产品
+     */
+    List<ProductInfo> selectByStatusAndFullTime(@Param("curDay") Date curDay, @Param("preDay") Date preDay);
 }

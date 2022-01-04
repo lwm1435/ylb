@@ -28,13 +28,13 @@
         bid_min_limit,bid_max_limit,product_status,
         product_full_time,product_desc
     </sql>
-    <select id="selectByPrimaryKey"  resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from b_product_info
         where id = #{id,jdbcType=INTEGER}
     </select>
-    <delete id="deleteByPrimaryKey"  >
+    <delete id="deleteByPrimaryKey">
         delete
         from b_product_info
         where id = #{id,jdbcType=INTEGER}
@@ -171,5 +171,15 @@
         SELECT COUNT(*)
         FROM b_product_info
         WHERE product_type = #{type}
+    </select>
+
+    <!--根据产品状态和满标时间获取前一天满标的产品-->
+    <select id="selectByStatusAndFullTime" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM b_product_info
+        WHERE product_status = 1
+        AND product_full_time &gt;= #{preDay}
+        AND product_full_time &lt; #{curDay}
     </select>
 </mapper>

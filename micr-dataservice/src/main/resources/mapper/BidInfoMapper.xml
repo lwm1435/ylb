@@ -113,7 +113,7 @@
         LIMIT 0,3
     </select>
     <!--根据产品id分页查投资记录-->
-    <select id="selectByProdId" resultType="com.lwm.common.vo.ProductBidInfo">
+    <select id="selectPageByProdId" resultType="com.lwm.common.vo.ProductBidInfo">
         SELECT b.id,
                DATE_FORMAT(bid_time, '%Y-%m-%d') AS bidDateTime,
                bid_money                         AS bidMoney,
@@ -137,5 +137,11 @@
         WHERE b.uid = #{uid}
         ORDER BY bid_time DESC
         LIMIT #{offset},#{pageSize};
+    </select>
+    <!--根据产品id查询投资记录-->
+    <select id="selectByProdId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM b_bid_info
+        WHERE prod_id = #{id}
     </select>
 </mapper>

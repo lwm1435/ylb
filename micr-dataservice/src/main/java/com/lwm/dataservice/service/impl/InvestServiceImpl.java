@@ -85,7 +85,7 @@ public class InvestServiceImpl implements InvestService {
             pageSize = 6;
         }
 
-        return bidInfoMapper.selectByProdId(id, (pageNo - 1) * pageSize, pageSize);
+        return bidInfoMapper.selectPageByProdId(id, (pageNo - 1) * pageSize, pageSize);
     }
 
     @Override

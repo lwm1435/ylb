@@ -5,14 +5,14 @@
 <mapper namespace="com.lwm.dataservice.mapper.IncomeRecordMapper">
 
     <resultMap id="BaseResultMap" type="com.lwm.common.model.IncomeRecord">
-            <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="uid" column="uid" jdbcType="INTEGER"/>
-            <result property="productId" column="product_id" jdbcType="INTEGER"/>
-            <result property="bidId" column="bid_id" jdbcType="INTEGER"/>
-            <result property="bidMoney" column="bid_money" jdbcType="DECIMAL"/>
-            <result property="incomeDate" column="income_date" jdbcType="DATE"/>
-            <result property="incomeMoney" column="income_money" jdbcType="DECIMAL"/>
-            <result property="incomeStatus" column="income_status" jdbcType="INTEGER"/>
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="uid" column="uid" jdbcType="INTEGER"/>
+        <result property="productId" column="product_id" jdbcType="INTEGER"/>
+        <result property="bidId" column="bid_id" jdbcType="INTEGER"/>
+        <result property="bidMoney" column="bid_money" jdbcType="DECIMAL"/>
+        <result property="incomeDate" column="income_date" jdbcType="DATE"/>
+        <result property="incomeMoney" column="income_money" jdbcType="DECIMAL"/>
+        <result property="incomeStatus" column="income_status" jdbcType="INTEGER"/>
     </resultMap>
 
     <!--分页查询收益记录映射-->
@@ -30,16 +30,16 @@
         income_money,income_status
     </sql>
 
-    <insert id="insert" keyColumn="id" keyProperty="id"  useGeneratedKeys="true">
+    <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
         insert into b_income_record
-        ( uid,product_id
-        ,bid_id,bid_money,income_date
-        ,income_money,income_status)
-        values (#{uid,jdbcType=INTEGER},#{productId,jdbcType=INTEGER}
-               ,#{bidId,jdbcType=INTEGER},#{bidMoney,jdbcType=DECIMAL},#{incomeDate,jdbcType=DATE}
-               ,#{incomeMoney,jdbcType=DECIMAL},#{incomeStatus,jdbcType=INTEGER})
+        ( uid, product_id
+        , bid_id, bid_money, income_date
+        , income_money, income_status)
+        values ( #{uid,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}
+               , #{bidId,jdbcType=INTEGER}, #{bidMoney,jdbcType=DECIMAL}, #{incomeDate,jdbcType=DATE}
+               , #{incomeMoney,jdbcType=DECIMAL}, #{incomeStatus,jdbcType=INTEGER})
     </insert>
-    <insert id="insertSelective" keyColumn="id" keyProperty="id"  useGeneratedKeys="true">
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
         insert into b_income_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>
@@ -87,7 +87,7 @@
                 income_status = #{incomeStatus,jdbcType=INTEGER},
             </if>
         </set>
-        where   id = #{id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
     </update>
 
     <!--根据用户id分页查询收益记录-->

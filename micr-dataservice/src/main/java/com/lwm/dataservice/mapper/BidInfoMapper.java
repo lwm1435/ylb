@@ -42,7 +42,7 @@ public interface BidInfoMapper {
     /**
      * 根据产品id分页查投资记录
      */
-    List<ProductBidInfo> selectByProdId(@Param("prodId") Integer prodId,
+    List<ProductBidInfo> selectPageByProdId(@Param("prodId") Integer prodId,
                                         @Param("offset") Integer offset,
                                         @Param("pageSize") Integer pageSize);
 
@@ -52,4 +52,9 @@ public interface BidInfoMapper {
     List<InvestRecordVO> selectPageByUid(@Param("uid") Integer uid,
                                          @Param("offset") Integer offset,
                                          @Param("pageSize") Integer pageSize);
+
+    /**
+     * 根据产品id查询投资记录
+     */
+    List<BidInfo> selectByProdId(Integer pId);
 }

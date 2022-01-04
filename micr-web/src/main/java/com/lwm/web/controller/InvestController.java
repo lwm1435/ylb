@@ -67,4 +67,5 @@ public class InvestController extends BaseController {
 
         return webResult;
     }
+
 }
