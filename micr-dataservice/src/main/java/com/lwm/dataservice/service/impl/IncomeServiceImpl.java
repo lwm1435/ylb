@@ -126,9 +126,10 @@ public class IncomeServiceImpl implements IncomeService {
         Date preDay = DateUtils.addDays(DateUtils.truncate(new Date(), Calendar.DATE), -1);
         List<IncomeRecord> incomeRecords = incomeMapper.selectByIncomeDateAndStatus(preDay);
 
-        //遍历收益记录,根据uid，bidMoney，incomeMoney更新每个用户账户的余额
+
         int row;
         for (IncomeRecord incomeRecord : incomeRecords) {
+            //遍历收益记录,根据uid，bidMoney，incomeMoney更新每个用户账户的余额
             row = accountMapper.updateBalanceByUid(incomeRecord.getUid(),
                     incomeRecord.getBidMoney(), incomeRecord.getIncomeMoney());
             if (row != 1){
