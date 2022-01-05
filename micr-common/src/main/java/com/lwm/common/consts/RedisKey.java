@@ -20,4 +20,14 @@ public class RedisKey {
      * 平台首页的三个数据
      */
     public static final String PLATFORM_INDEX_DATA = "PLATFORM:INDEX:DATA";
+
+    /**
+     * 快钱订单id后的序列号，添加在时间戳后面
+     */
+    public static final String KQ_ORDER_ID_SEQ = "KQ:ORDER:ID:SEQ";
+
+    /**
+     * 充值订单key
+     */
+    public static final String RECHARGE_ORDER_ID_ZSET = "RECHARGE:ORDER:ID:ZSET";
 }

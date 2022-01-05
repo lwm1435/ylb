@@ -18,7 +18,7 @@
         <id column="id" property="id"/>
         <result column="product_name" property="productName"/>
         <result column="bid_money" property="bidMoney"/>
-        <result column="bid_time" property="bidTime"/>
+        <result column="bidTime" property="bidTime"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -131,7 +131,7 @@
         SELECT b.id,
                p.product_name,
                b.bid_money,
-               DATE_FORMAT(b.bid_time, '%Y-%m-%d') AS bid_time
+               DATE_FORMAT(b.bid_time, '%Y-%m-%d') AS bidTime
         FROM b_product_info p
                  JOIN b_bid_info b ON p.id = b.prod_id
         WHERE b.uid = #{uid}

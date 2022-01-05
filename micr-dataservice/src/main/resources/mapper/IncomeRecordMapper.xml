@@ -19,7 +19,7 @@
     <resultMap id="IncomeRecordVO" type="com.lwm.common.vo.IncomeRecordVO">
         <id column="id" property="id"/>
         <result column="product_name" property="productName"/>
-        <result column="income_date" property="incomeDate"/>
+        <result column="incomeDate" property="incomeDate"/>
         <result column="income_money" property="incomeMoney"/>
         <result column="income_status" property="incomeStatus"/>
     </resultMap>
@@ -72,7 +72,7 @@
     <select id="selectPageByUid" resultMap="IncomeRecordVO">
         SELECT i.id,
                p.product_name,
-               DATE_FORMAT(i.income_date, '%Y-%m-%d') AS income_date,
+               DATE_FORMAT(i.income_date, '%Y-%m-%d') AS incomeDate,
                i.income_money,
                i.income_status
         FROM b_income_record i

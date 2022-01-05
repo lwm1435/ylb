@@ -20,7 +20,7 @@
         <id column="id" property="id"/>
         <result column="recharge_desc" property="rechargeDesc"/>
         <result column="recharge_money" property="rechargeMoney"/>
-        <result column="recharge_time" property="rechargeTime"/>
+        <result column="rechargeTime" property="rechargeTime"/>
         <result column="recharge_status" property="rechargeStatus"/>
     </resultMap>
 
@@ -29,7 +29,13 @@
         recharge_status,recharge_money,recharge_time,
         recharge_desc,channel
     </sql>
-
+    <!--插入一条充值记录-->
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO  b_recharge_record
+        (uid, recharge_no, recharge_status, recharge_money, recharge_desc, recharge_time, channel)
+        VALUE (#{uid},#{rechargeNo},#{rechargeStatus},#{rechargeMoney},#{rechargeDesc},#{rechargeTime},#{channel})
+    </insert>
+    <!--根据id查单条-->
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
@@ -42,7 +48,7 @@
         SELECT id,
                recharge_desc,
                recharge_money,
-               DATE_FORMAT(recharge_time, '%Y-%m-%d') AS recharge_time,
+               DATE_FORMAT(recharge_time, '%Y-%m-%d') AS rechargeTime,
                recharge_status
         FROM b_recharge_record
         WHERE uid = #{uid}
