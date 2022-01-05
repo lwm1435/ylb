@@ -14,6 +14,9 @@ import java.util.List;
 */
 public interface RechargeRecordMapper {
 
+    /**
+     * 根据id查单条
+     */
     RechargeRecord selectByPrimaryKey(Long id);
 
     /**
@@ -22,4 +25,10 @@ public interface RechargeRecordMapper {
     List<RechargeRecordVO> selectPageByUid(@Param("uid") Integer uid,
                                            @Param("offset") Integer offset,
                                            @Param("pageSize") Integer pageSize);
+
+    /**
+     * 插入一条充值记录
+     */
+    int insert(RechargeRecord rechargeRecord);
+
 }

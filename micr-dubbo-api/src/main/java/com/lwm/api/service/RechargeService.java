@@ -2,6 +2,7 @@ package com.lwm.api.service;
 
 import com.lwm.common.vo.RechargeRecordVO;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -16,4 +17,11 @@ public interface RechargeService {
      */
     List<RechargeRecordVO> queryRechargeRecordByUid(Integer uid, Integer pageNo, Integer pageSize);
 
+    /**
+     * 添加一条充值记录
+     * @param userId 用户id
+     * @param money 充值金额
+     * @param orderId 订单id
+     */
+    boolean addRecharge(Integer userId, BigDecimal money, String orderId);
 }

@@ -32,4 +32,12 @@ public class YLBConst {
     public static final int INCOME_STATUS_PLAN = 0;
     /*已返还*/
     public static final int INCOME_STATUS_BACK = 1;
+
+    /***************充值记录状态************************/
+    /*正在充值*/
+    public static final int RECHARGE_PROCESSING = 0;
+    /*充值成功*/
+    public static final int RECHARGE_SUCCESS = 1;
+    /*充值失败*/
+    public static final int RECHARGE_FAILURE = 2;
 }
