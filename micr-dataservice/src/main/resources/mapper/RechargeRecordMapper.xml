@@ -35,6 +35,15 @@
         (uid, recharge_no, recharge_status, recharge_money, recharge_desc, recharge_time, channel)
         VALUE (#{uid},#{rechargeNo},#{rechargeStatus},#{rechargeMoney},#{rechargeDesc},#{rechargeTime},#{channel})
     </insert>
+
+    <!--更新充值状态和描述-->
+    <update id="updateByRecharge">
+        UPDATE b_recharge_record
+        SET recharge_status = #{rechargeStatus},
+            recharge_desc = #{rechargeDesc}
+        WHERE id = #{id}
+    </update>
+
     <!--根据id查单条-->
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -54,6 +63,11 @@
         WHERE uid = #{uid}
         ORDER BY recharge_time DESC
         LIMIT #{offset},#{pageSize};
+    </select>
+    <select id="selectByNo" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM b_recharge_record
+        WHERE recharge_no = #{orderId}
     </select>
 
 </mapper>

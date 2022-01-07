@@ -2,15 +2,19 @@ package com.lwm.pay.controller;
 
 import com.lwm.api.service.RechargeService;
 import com.lwm.api.service.UserService;
+import com.lwm.common.consts.RedisKey;
 import com.lwm.common.model.User;
 import com.lwm.pay.service.KuaiQianService;
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -30,6 +34,9 @@ public class KuaiQianController {
 
     @DubboReference(interfaceClass = RechargeService.class,version = "1.0")
     private RechargeService rechargeService;
+
+    @Resource(name = "stringRedisTemplate")
+    private StringRedisTemplate redisTemplate;
 
     /**
      * 接收前端的充值请求
@@ -62,8 +69,21 @@ public class KuaiQianController {
         return view;
     }
 
+
+    /**
+     * 处理异步通知
+     */
     @GetMapping("/receive/kq/notify")
-    public String receiveKqNotify() {
-        return "";
+    @ResponseBody
+    public String receiveKqNotify(HttpServletRequest request) {
+        //接收快钱步通知消息，处理订单
+        if (kuaiQianService.doKqNotify(request)){
+            //订单处理完成(1支付完成2没有支付)删除redis中保留的订单
+            redisTemplate.opsForZSet().remove(RedisKey.RECHARGE_ORDER_ID_ZSET,
+                    request.getParameter("orderId"));
+        }
+
+
+        return "<result>1</result><redirecturl>http://localhost:7000/user/recharge/showResult</redirecturl>";
     }
 }

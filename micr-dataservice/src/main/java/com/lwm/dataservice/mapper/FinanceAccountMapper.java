@@ -33,4 +33,9 @@ public interface FinanceAccountMapper {
      * 根据uid，bidMoney，incomeMoney更新每个用户账户的余额
      */
     int updateBalanceByUid(@Param("uid") Integer uid, @Param("bidMoney") BigDecimal bidMoney, @Param("incomeMoney") BigDecimal incomeMoney);
+
+    /**
+     * 根据用户id 用户充值金额更新余额
+     */
+    int updateBalanceByPay(@Param("uid") Integer uid, @Param("payAmount") BigDecimal payAmount);
 }

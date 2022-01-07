@@ -24,4 +24,13 @@ public interface RechargeService {
      * @param orderId 订单id
      */
     boolean addRecharge(Integer userId, BigDecimal money, String orderId);
+
+    /**
+     * 处理充值订单
+     * @param kq 充值渠道时kq
+     * @param orderId 充值订单id
+     * @param payResult 用户向快钱支付的结果
+     * @param payAmount 用户向快钱支付的金额
+     */
+    int handlerRecharge(String kq, String orderId, String payResult, String payAmount);
 }

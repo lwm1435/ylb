@@ -31,4 +31,15 @@ public interface RechargeRecordMapper {
      */
     int insert(RechargeRecord rechargeRecord);
 
+    /**
+     * 根据订单号查询充值记录
+     */
+    RechargeRecord selectByNo(String orderId);
+
+
+    /**
+     * 更新充值的状态和描述
+     */
+    int updateByRecharge(RechargeRecord record);
+
 }
