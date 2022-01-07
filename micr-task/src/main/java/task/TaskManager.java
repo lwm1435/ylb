@@ -2,6 +2,7 @@ package task;
 
 
 import com.lwm.api.service.IncomeService;
+import com.lwm.common.utils.HttpClientUtils;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -30,5 +31,15 @@ public class TaskManager {
     public void handleIncomeBack(){
         System.out.println("收益返还执行");
         incomeService.incomeBack();
+    }
+
+    @Scheduled(cron = "0 0/20 * * * ?")
+    public void handlePayKqQuery(){
+        System.out.println("通过快钱查询充值订单情况");
+        try {
+            HttpClientUtils.doGet("http://localhost:9000/receive/task/kq/query");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

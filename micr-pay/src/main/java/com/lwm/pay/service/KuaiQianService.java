@@ -1,7 +1,13 @@
 package com.lwm.pay.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.lwm.api.service.RechargeService;
+import com.lwm.common.consts.RedisKey;
+import com.lwm.common.utils.HttpUtil;
 import com.lwm.pay.util.Pkipair;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -10,10 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author lwm1435@163.com
@@ -137,7 +140,7 @@ public class KuaiQianService {
      *
      * @param request 请求参数
      */
-    public boolean doKqNotify(HttpServletRequest request) {
+    public void doKqNotify(HttpServletRequest request) {
         String merchantAcctId = request.getParameter("merchantAcctId");
         String version = request.getParameter("version");
         String language = request.getParameter("language");
@@ -194,7 +197,6 @@ public class KuaiQianService {
         //验签方法 TRUE:通过，false不能处理业务
         boolean flag = pki.enCodeByCer(merchantSignMsgVal, signMsg);
         System.out.println("flag=====" + flag);
-        flag = true;
         if (flag) {
             flag = false;
             //验签通过
@@ -202,16 +204,12 @@ public class KuaiQianService {
             if ("1001214035601".equals(merchantAcctId)) {
                 //处理订单，调用data-service的方法
                 int res = rechargeService.handlerRecharge("kq", orderId, payResult, payAmount);
-                if (res == 1) {
-                    flag = true;
-                }
             }
         } else {
             //没有通过
             //输出日志：
             System.out.println("没有通过验签的订单：" + orderId + "|" + payAmount);
         }
-        return flag;
     }
 
 
@@ -249,4 +247,95 @@ public class KuaiQianService {
     }
 
 
+    /**
+     * 向快钱查询订单，并处理
+     */
+    public void doKqQueryOrder(Set<String> orderIds) {
+        for (String orderId : orderIds) {
+            //调用快钱的查询接口
+            String json = invokeKqQuery(orderId);
+            //根据快钱的查询结果，处理订单记录
+            doQueryResult(json);
+            //删除已经处理的orderId
+            stringRedisTemplate.opsForZSet().remove(RedisKey.RECHARGE_ORDER_ID_ZSET,orderId);
+
+        }
+    }
+    private void doQueryResult(String json){
+        boolean isOk = false;
+        if (StringUtils.isNotBlank(json)){
+            //把json串转为对象获取订单详情
+            JSONArray jsonArray = JSON.parseObject(json).getJSONArray("orderDetail");
+            //是否有值
+            if (jsonArray != null){
+                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                //处理充值订单
+                rechargeService.handlerRecharge("kq", jsonObject.getString("orderId"),
+                        jsonObject.getString("payResult"), jsonObject.getString("payAmount"));
+
+
+            }
+        }
+    }
+
+    private String invokeKqQuery(String queryOrderId){
+        Map<String, Object> request = new HashMap<String, Object>();
+        //固定值：1代表UTF-8;
+        String inputCharset = "1";
+        //固定值：v2.0 必填
+        String version = "v2.0";
+        //1代表Md5，2 代表PKI加密方式  必填
+        String signType = "2";
+        //人民币账号 membcode+01  必填
+        String merchantAcctId = "1001214035601";
+        //固定值：0 按商户订单号单笔查询，1 按交易结束时间批量查询必填
+        String queryType = "0";
+        //固定值：1	代表简单查询 必填
+        String queryMode = "1";
+        String startTime = "";
+        String endTime = "";
+        String requestPage = "";
+        String orderId = queryOrderId;
+        String key = "27YKWKBKHT2IZSQ4";
+
+        request.put("inputCharset", inputCharset);
+        request.put("version", version);
+        request.put("signType", signType);
+        request.put("merchantAcctId", merchantAcctId);
+        request.put("queryType", queryType);
+        request.put("queryMode", queryMode);
+        request.put("startTime", startTime);
+        request.put("endTime", endTime);
+        request.put("requestPage", requestPage);
+        request.put("orderId", orderId);
+
+        String message="";
+        message = appendParam(message,"inputCharset",inputCharset,null);
+        message = appendParam(message,"version",version,null);
+        message = appendParam(message,"signType",signType,null);
+        message = appendParam(message,"merchantAcctId",merchantAcctId,null);
+        message = appendParam(message,"queryType",queryType,null);
+        message = appendParam(message,"queryMode",queryMode,null);
+        message = appendParam(message,"startTime",startTime,null);
+        message = appendParam(message,"endTime",endTime,null);
+        message = appendParam(message,"requestPage",requestPage,null);
+        message = appendParam(message,"orderId",orderId,null);
+        message = appendParam(message,"key",key,null);
+
+        Pkipair pki = new Pkipair();
+        String sign = pki.signMsg(message);
+        //把生成的签名串也的放到map
+        request.put("signMsg", sign);
+
+        //sandbox提交地址
+        String reqUrl = "https://sandbox.99bill.com/gatewayapi/gatewayOrderQuery.do";
+        String response = "";
+        try {
+            response = HttpUtil.doPostJsonRequestByHttps(JSON.toJSONString(request), reqUrl, 3000, 8000);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return response;
+    }
 }
